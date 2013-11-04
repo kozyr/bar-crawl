@@ -30,4 +30,15 @@ public class DirectedBlock {
     public Block getBlock() {
         return block;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder(getId());
+        sb.append(": ");
+        sb.append(getBlock().getStreet().getOsm_name());
+        sb.append(" - ");
+        sb.append(getBlock().getBars().size());
+        sb.append(" bars");
+        return sb.toString();
+    }
 }

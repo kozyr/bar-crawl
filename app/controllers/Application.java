@@ -1,6 +1,8 @@
 package controllers;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.base.Optional;
 import com.google.common.base.Stopwatch;
 import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import views.html.index;
 
 import java.util.*;
 
+import static play.mvc.Results.notFound;
 import static play.mvc.Results.ok;
 
 @Controller
@@ -45,10 +48,14 @@ public class Application {
         Zone zone = zoneService.buildZone(start, 2* MAX_BAR_CRAWL_DISTANCE);
         List<DirectedBlock> first = routeProvider.getBlockFromPoint(start, zone);
         Logger.info("Initial streets: "  + first);
-        Path path = tourGuide.ratingBfs(first, zone, MAX_BAR_CRAWL_DISTANCE);
+        Optional<Path> path = tourGuide.ratingBfs(first, zone, MAX_BAR_CRAWL_DISTANCE);
 
         watch.stop();
         Logger.info("Total time: " + watch);
-        return ok(Json.toJson(path));
+        if (path.isPresent()) {
+            return ok(Json.toJson(path.get()));
+        } else {
+            return notFound();
+        }
     }
 }

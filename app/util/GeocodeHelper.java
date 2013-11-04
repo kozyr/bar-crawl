@@ -3,22 +3,16 @@ package util;
 import java.io.BufferedReader;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Optional;
 import models.GeoPoint;
 import play.Logger;
+import play.libs.WS;
 
 public class GeocodeHelper {
-    private static final int CONNECTION_TIMEOUT = 5000;
-    private static final int READ_TIMEOUT = 5000;
 
     private static final String GOOGLE_URL = "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
 
@@ -39,8 +33,8 @@ public class GeocodeHelper {
         }
     }
 
-    public static GeoPoint getGeoPoint(String address)  {
-        GeoPoint result = null;
+    public static Optional<GeoPoint> getGeoPoint(String address)  {
+        Optional<GeoPoint> result = Optional.absent();
         try {
             JsonNode root = getGeoData(address);
             if (isOK(root)) {
@@ -53,8 +47,8 @@ public class GeocodeHelper {
         return result;
     }
 
-    private static GeoPoint getLatLng(JsonNode root) {
-        GeoPoint result = null;
+    private static Optional<GeoPoint> getLatLng(JsonNode root) {
+        Optional<GeoPoint> result = Optional.absent();
         JsonNode location = null;
         JsonNode results = root.get("results");
 
@@ -64,7 +58,7 @@ public class GeocodeHelper {
         }
 
         if (location != null) {
-            result = new GeoPoint(location.get("lat").asDouble(), location.get("lng").asDouble());
+            result = Optional.of(new GeoPoint(location.get("lat").asDouble(), location.get("lng").asDouble()));
         }
 
         return result;
@@ -78,53 +72,13 @@ public class GeocodeHelper {
 
 
     private static JsonNode getGeoData(String address) throws GeocodeException {
-        String json = null;
-        Logger.info("Google Address: " + address);
+        // Logger.info("Google Address: " + address);
         try {
-            address = URLDecoder.decode(address, "UTF-8");
-            String url = GOOGLE_URL + URLEncoder.encode(address, "UTF-8");
-            json = fetchData(url);
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readValue(json, JsonNode.class);
+            JsonNode rootNode = WS.url(GOOGLE_URL + URLEncoder.encode(address, "UTF-8")).
+                    get().get(5, TimeUnit.SECONDS).asJson();
             return rootNode;
         } catch (Exception e) {
-            throw new GeocodeException("Fetched " + json + " \nand could not parse it", e);
+            throw new GeocodeException("Could not fetch json  for " + address, e);
         }
-    }
-
-    private static String fetchData(String strUrl) throws IOException {
-        Logger.info("Google URL: " + strUrl);
-        BufferedReader reader = null;
-        StringBuilder sb = new StringBuilder();
-        try {
-            URL url = new URL(strUrl);
-            URLConnection connection = url.openConnection();
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
-            connection.setReadTimeout(READ_TIMEOUT);
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-
-
-
-    public static void main(String[] args) {
-        GeoPoint sf = getGeoPoint("1600 Amphitheatre Parkway,Mountain View,CA");
-        System.out.println(sf);
     }
 }

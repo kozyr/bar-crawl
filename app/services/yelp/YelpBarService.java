@@ -1,5 +1,6 @@
 package services.yelp;
 
+import com.google.common.base.Optional;
 import models.Bar;
 import models.GeoPoint;
 import org.springframework.stereotype.Service;
@@ -29,38 +30,54 @@ public class YelpBarService implements BarService {
         YelpSearchResult yelpResult = Json.fromJson(Json.parse(json), YelpSearchResult.class);
 
         for (Business business : yelpResult.getBusinesses()) {
-            Bar bar = fromBusiness(business);
-            Logger.info("Found " + bar);
-            bars.add(bar);
+            Optional<Bar> bar = fromBusiness(business);
+            if (bar.isPresent()) {
+                Logger.info("Found " + bar);
+                bars.add(bar.get());
+            }
         }
 
         return bars;
     }
 
-    private Bar fromBusiness(Business b) {
-        Bar bar = new Bar();
-        bar.setBarId(b.getId());
-        bar.setAddress(b.getLocation().getAddress().get(0));
+    private Optional<Bar> fromBusiness(Business b) {
+        Optional<Bar> result = Optional.absent();
+        boolean isOk = false;
+        double lat = 0.0;
+        double lon = 0.0;
+        String address = b.getLocation().getAddress().get(0);
         Coordinate coord = b.getLocation().getCoordinate();
-        if (coord != null) {
-            bar.setLat(coord.getLatitude());
-            bar.setLon(coord.getLongitude());
-        } else {
-            GeoPoint point = GeocodeHelper.getGeoPoint(
-                    bar.getAddress() + ", " + Play.application().configuration().getString("city"));
-            if (point != null) {
-                bar.setLat(point.getLat());
-                bar.setLon(point.getLon());
+        if (coord == null) {
+            Optional<GeoPoint> point = GeocodeHelper.getGeoPoint(
+                    address + ", " + Play.application().configuration().getString("city"));
+            if (point.isPresent()) {
+                lat = point.get().getLat();
+                lon = point.get().getLon();
+                isOk = !b.isClosed();
+            } else {
+                Logger.error("Point not present...");
             }
+        } else {
+            lat = coord.getLatitude();
+            lon = coord.getLongitude();
+            isOk = !b.isClosed();
         }
-        bar.setName(b.getName());
-        bar.setUrl(b.getUrl());
+        if (isOk) {
+            Bar bar = new Bar();
+            bar.setBarId(b.getId());
+            bar.setAddress(address);
+            bar.setLat(lat);
+            bar.setLon(lon);
+            bar.setName(b.getName());
+            bar.setUrl(b.getUrl());
 
-        bar.setPhone(b.getDisplayPhone());
-        bar.setReviewCount(b.getReviewCount());
-        bar.setRating(b.getRating());
-        bar.setGeom(GeoUtil.fromLatLon(bar.getLat(), bar.getLon()));
+            bar.setPhone(b.getDisplayPhone());
+            bar.setReviewCount(b.getReviewCount());
+            bar.setRating(b.getRating());
+            bar.setGeom(GeoUtil.fromLatLon(bar.getLat(), bar.getLon()));
+            result = Optional.of(bar);
+        }
 
-        return bar;
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package services;
 
+import com.google.common.base.Optional;
 import models.DirectedBlock;
 import models.Path;
 import models.Zone;
@@ -19,7 +20,7 @@ public class TourGuide {
     @Autowired
     private ZoneService zoneService;
 
-    public Path ratingBfs(List<DirectedBlock> start, Zone zone, int distance) {
+    public Optional<Path> ratingBfs(List<DirectedBlock> start, Zone zone, int distance) {
         Queue<DirectedBlock> queue = new LinkedList<>();
         Set<DirectedBlock> visited = new HashSet<>();
         Map<DirectedBlock, Path> map = new HashMap<>();
@@ -57,12 +58,12 @@ public class TourGuide {
         }
 
         Logger.info("Number of paths " + map.size());
-        Path winner = null;
+        Optional<Path> winner = Optional.absent();
         double average = 0;
         for (DirectedBlock street : map.keySet()) {
             Path path = map.get(street);
             if (path.getAverageRating() > average) {
-                winner = path;
+                winner = Optional.of(path);
                 average = path.getAverageRating();
             }
         }
