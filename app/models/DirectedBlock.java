@@ -33,7 +33,8 @@ public class DirectedBlock {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(getId());
+        final StringBuilder sb = new StringBuilder();
+        sb.append(getId());
         sb.append(": ");
         sb.append(getBlock().getStreet().getOsm_name());
         sb.append(" - ");

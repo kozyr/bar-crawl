@@ -27,7 +27,10 @@ libraryDependencies ++= Seq(
   "org.geotools" % "gt-referencing" % "10.1",
   "org.geotools" % "gt-epsg-hsql" % "10.1",
   "org.geotools" % "gt-epsg-extension" % "10.1",
-  "org.scribe" % "scribe" % "1.3.5"
+  "org.scribe" % "scribe" % "1.3.5",
+  "org.webjars" %% "webjars-play" % "2.2.0",
+  "org.webjars" % "bootstrap" % "3.0.1",
+  "org.webjars" % "jquery" % "2.0.3-1"
 )
 
 play.Project.playJavaSettings

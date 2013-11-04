@@ -22,7 +22,18 @@ public class ZoneService {
         watch.start();
 
         List<Street> streets = streetRepository.findByLocation(center.getGeom(), distance);
+        if (Logger.isDebugEnabled()) {
+            for (Street s : streets) {
+                Logger.debug(s.toString());
+            }
+        }
         List<Bar> bars = barService.findByLocation(center, distance);
+        if (Logger.isDebugEnabled()) {
+            for (Bar b : bars) {
+                Logger.debug(b.toString());
+            }
+
+        }
 
         watch.stop();
         Logger.info("Time to read in data: " + watch);
