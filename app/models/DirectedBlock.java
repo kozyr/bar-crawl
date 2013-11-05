@@ -18,8 +18,9 @@ public class DirectedBlock {
     }
 
     public GeoPoint getEnd() {
-        LatLon latLon = segment.getLatLons()[1];
-        return new GeoPoint(latLon.getLat(), latLon.getLon());
+        LatLon [] latLon = segment.getLatLons();
+        LatLon end = latLon[latLon.length - 1];
+        return new GeoPoint(end.getLat(), end.getLon());
     }
 
     public int getId() {
