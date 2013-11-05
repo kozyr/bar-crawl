@@ -67,7 +67,9 @@ public class GeocodeHelper {
     private static boolean isOK(JsonNode root) {
         String status = root.get("status").asText();
         StatusCode code = StatusCode.valueOf(status);
-        Logger.info(code.toString());
+        if (!code.isFine()) {
+            Logger.info(code.toString());
+        }
         return code.isFine();
     }
 

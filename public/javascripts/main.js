@@ -92,8 +92,8 @@ BarCrawl.prototype.processRoute = function(startLatLng, jsonRoute) {
 
     var blockEnd = null;
     $.each(jsonRoute.edges, function(i, edge) {
-        console.log(edge.block.street.osm_name);
-        blockEnd = new google.maps.LatLng(edge.block.street.y2, edge.block.street.x2);
+        console.log(edge.block.street.osm_name + " (" + edge.start.lat + ", " +  edge.start.lon + ") -> (" + edge.end.lat + ", " + edge.end.lon + ")");
+        blockEnd = new google.maps.LatLng(edge.end.lat, edge.end.lon);
         points.push(blockEnd);
         $.each(edge.block.bars, function(j, bar) {
             that.addMarker(new google.maps.LatLng(bar.lat, bar.lon), bar.name, that.barIcon);
@@ -115,6 +115,9 @@ BarCrawl.prototype.displayRoute = function(points) {
                 icon: this.lineSymbol,
                 offset: '100%'
             }],
+            strokeOpacity: 0.6,
+            strokeWeight: 5,
+            strokeColor: '#0000FF',
             map: this.map
         });
     }

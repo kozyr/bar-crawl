@@ -1,5 +1,6 @@
 package models;
 
+import de.cm.osm2po.model.LatLon;
 import de.cm.osm2po.routing.RoutingResultSegment;
 
 public class DirectedBlock {
@@ -9,6 +10,16 @@ public class DirectedBlock {
     public DirectedBlock(RoutingResultSegment segment, Block block) {
         this.segment = segment;
         this.block = block;
+    }
+
+    public GeoPoint getStart() {
+        LatLon latLon = segment.getLatLons()[0];
+        return new GeoPoint(latLon.getLat(), latLon.getLon());
+    }
+
+    public GeoPoint getEnd() {
+        LatLon latLon = segment.getLatLons()[1];
+        return new GeoPoint(latLon.getLat(), latLon.getLon());
     }
 
     public int getId() {
@@ -39,7 +50,7 @@ public class DirectedBlock {
         sb.append(getBlock().getStreet().getOsm_name());
         sb.append(" - ");
         sb.append(getBlock().getBars().size());
-        sb.append(" markers");
+        sb.append(" bars");
         return sb.toString();
     }
 }

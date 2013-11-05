@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vividsolutions.jts.geom.Point;
 import util.GeoUtil;
 
@@ -19,6 +20,7 @@ public final class GeoPoint {
         return lat;
     }
 
+    @JsonIgnore
     public Point getGeom() {
         return geom;
     }

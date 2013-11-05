@@ -32,7 +32,6 @@ public class YelpBarService implements BarService {
         for (Business business : yelpResult.getBusinesses()) {
             Optional<Bar> bar = fromBusiness(business);
             if (bar.isPresent()) {
-                Logger.info("Found " + bar);
                 bars.add(bar.get());
             }
         }
