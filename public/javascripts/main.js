@@ -2,6 +2,9 @@ var BarCrawl= function(map) {
     this.crawlRoute = null;
     this.map = map;
     this.markers = new Array();
+    this.barIcon = "/assets/images/drink.png";
+    this.startIcon = "/assets/images/group.png";
+    this.endIcon = "/assets/images/finish.png";
     this.lineSymbol = {
         path: google.maps.SymbolPath.CIRCLE,
         scale: 8,
@@ -29,15 +32,15 @@ BarCrawl.prototype.changeLocation = function(myLocation) {
     this.map.setCenter(myLocation);
     this.map.setZoom(16);
     this.clearMap();
-    this.addMarker(myLocation, "You are here");
+    // this.addMarker(myLocation, "You are here");
 };
 
-BarCrawl.prototype.addMarker = function(position, title) {
+BarCrawl.prototype.addMarker = function(position, title, icon) {
     var marker = new google.maps.Marker({
         map: this.map,
         position: position,
         animation: google.maps.Animation.DROP,
-        icon:  this.startIcon,
+        icon:  icon,
         title: title
     });
 
@@ -75,19 +78,29 @@ BarCrawl.prototype.getCrawlRoute = function(latLng) {
             lon: latLng.lng()
         }
     }).success(function(response) {
-            that.processRoute(latLng, response);
+        that.processRoute(latLng, response);
     });
 }
 
 BarCrawl.prototype.processRoute = function(startLatLng, jsonRoute) {
+    var that = this;
     var points = new Array();
 
+    this.clearMap();
     points.push(startLatLng);
+    this.addMarker(startLatLng, "You are here", this.startIcon);
+
+    var blockEnd = null;
     $.each(jsonRoute.edges, function(i, edge) {
         console.log(edge.block.street.osm_name);
-        points.push(new google.maps.LatLng(edge.block.street.y2, edge.block.street.x2));
+        blockEnd = new google.maps.LatLng(edge.block.street.y2, edge.block.street.x2);
+        points.push(blockEnd);
+        $.each(edge.block.bars, function(j, bar) {
+            that.addMarker(new google.maps.LatLng(bar.lat, bar.lon), bar.name, that.barIcon);
+        });
     });
 
+    this.addMarker(blockEnd, "The End", this.endIcon);
     this.displayRoute(points);
 }
 

@@ -39,7 +39,7 @@ public class DirectedBlock {
         sb.append(getBlock().getStreet().getOsm_name());
         sb.append(" - ");
         sb.append(getBlock().getBars().size());
-        sb.append(" bars");
+        sb.append(" markers");
         return sb.toString();
     }
 }
