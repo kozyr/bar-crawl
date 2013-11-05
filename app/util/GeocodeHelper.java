@@ -14,7 +14,7 @@ import play.libs.WS;
 
 public class GeocodeHelper {
 
-    private static final String GOOGLE_URL = "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
+    private static final String GOOGLE_URL = "http://maps.googleapis.com/maps/api/geocode/json";
 
     enum StatusCode {
         OK,
@@ -67,6 +67,7 @@ public class GeocodeHelper {
     private static boolean isOK(JsonNode root) {
         String status = root.get("status").asText();
         StatusCode code = StatusCode.valueOf(status);
+        Logger.info(code.toString());
         return code.isFine();
     }
 
@@ -74,7 +75,9 @@ public class GeocodeHelper {
     private static JsonNode getGeoData(String address) throws GeocodeException {
         // Logger.info("Google Address: " + address);
         try {
-            JsonNode rootNode = WS.url(GOOGLE_URL + URLEncoder.encode(address, "UTF-8")).
+            JsonNode rootNode = WS.url(GOOGLE_URL).
+                    setQueryParameter("address", address).
+                    setQueryParameter("sensor", "false").
                     get().get(5, TimeUnit.SECONDS).asJson();
             return rootNode;
         } catch (Exception e) {

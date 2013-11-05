@@ -54,9 +54,6 @@ public class YelpBarService implements BarService {
                 lat = point.get().getLat();
                 lon = point.get().getLon();
                 isOk = !b.isClosed();
-            } else {
-                // TODO: error
-
             }
         } else {
             lat = coord.getLatitude();
