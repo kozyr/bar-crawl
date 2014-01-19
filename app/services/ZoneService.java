@@ -40,12 +40,14 @@ public class ZoneService {
                 }
         );
 
-        F.Promise<Zone> result = F.Promise.sequence(streetPromise, barPromise).map(new F.Function<List<List<? extends Object>>, Zone>() {
-            @Override
-            public Zone apply(List<List<? extends Object>> lists) throws Throwable {
-                return new Zone((List<Street>) lists.get(0), (List<Bar>) lists.get(1));
-            }
-        });
+        F.Promise<Zone> result = F.Promise.sequence(streetPromise, barPromise).map(
+                new F.Function<List<List<? extends Object>>, Zone>() {
+                    @Override
+                    public Zone apply(List<List<? extends Object>> lists) throws Throwable {
+                        return new Zone((List<Street>) lists.get(0), (List<Bar>) lists.get(1));
+                    }
+                }
+        );
 
         return result.get(10, TimeUnit.SECONDS);
     }
