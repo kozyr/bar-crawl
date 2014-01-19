@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
 import play.libs.F;
+import play.libs.F.Promise;
+import play.libs.F.Function;
+import play.libs.F.Function0;
 import repositories.StreetRepository;
 import scala.concurrent.impl.Future;
 
@@ -24,24 +27,24 @@ public class ZoneService {
     private BarService barService;
 
     public Zone buildZone(final GeoPoint center, final int distance) {
-        F.Promise<List<Street>> streetPromise = F.Promise.promise(
-                new F.Function0<List<Street>>() {
+        Promise<List<Street>> streetPromise = Promise.promise(
+                new Function0<List<Street>>() {
                     public List<Street> apply() {
                         return streetRepository.findByLocation(center.getGeom(), distance);
                     }
                 }
         );
 
-        F.Promise<List<Bar>> barPromise = F.Promise.promise(
-                new F.Function0<List<Bar>>() {
+        Promise<List<Bar>> barPromise = Promise.promise(
+                new Function0<List<Bar>>() {
                     public List<Bar> apply() {
                         return barService.findByLocation(center, distance);
                     }
                 }
         );
 
-        F.Promise<Zone> result = F.Promise.sequence(streetPromise, barPromise).map(
-                new F.Function<List<List<? extends Object>>, Zone>() {
+        Promise<Zone> result = Promise.sequence(streetPromise, barPromise).map(
+                new Function<List<List<? extends Object>>, Zone>() {
                     @Override
                     public Zone apply(List<List<? extends Object>> lists) throws Throwable {
                         return new Zone((List<Street>) lists.get(0), (List<Bar>) lists.get(1));

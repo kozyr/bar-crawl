@@ -8,8 +8,9 @@ import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import play.Logger;
-import play.libs.F;
-import static play.libs.F.Promise.promise;
+import play.libs.F.Promise;
+import play.libs.F.Function;
+import play.libs.F.Function0;
 import play.libs.Json;
 import play.mvc.Result;
 import repositories.BarCrawlRepository;
@@ -21,7 +22,6 @@ import views.html.index;
 
 import java.util.*;
 
-import static play.mvc.Results.async;
 import static play.mvc.Results.notFound;
 import static play.mvc.Results.ok;
 
@@ -43,16 +43,16 @@ public class Application {
         return ok(index.render());
     }
 
-    public F.Promise<Result> barCrawl(final double lat, final double lon) {
-        F.Promise<Optional<Path>> barPromise = F.Promise.promise(
-                new F.Function0<Optional<Path>>() {
+    public Promise<Result> barCrawl(final double lat, final double lon) {
+        Promise<Optional<Path>> barPromise = Promise.promise(
+                new Function0<Optional<Path>>() {
                     public Optional<Path> apply() {
                         return calcBarPath(lat, lon);
                     }
                 }
         );
         return barPromise.map(
-                new F.Function<Optional<Path>, Result>() {
+                new Function<Optional<Path>, Result>() {
                     public Result apply(Optional<Path> path) {
                         if (path.isPresent()) {
                             return ok(Json.toJson(path.get()));
