@@ -8,6 +8,8 @@ resolvers += "OpenGEO repo" at "http://repo.opengeo.org"
 
 resolvers += "Hibernate Spatial repo" at "http://www.hibernatespatial.org/repository"
 
+resolvers += "foursquare-api" at "http://foursquare-api-java.googlecode.com/svn/repository"
+
 libraryDependencies ++= Seq(
   javaCore,
   cache,
@@ -30,7 +32,8 @@ libraryDependencies ++= Seq(
   "org.scribe" % "scribe" % "1.3.5",
   "org.webjars" %% "webjars-play" % "2.2.0",
   "org.webjars" % "bootstrap" % "3.0.1",
-  "org.webjars" % "jquery" % "2.0.3-1"
+  "org.webjars" % "jquery" % "2.0.3-1",
+  "fi.foyt" %"foursquare-api" % "1.0.2"
 )
 
 play.Project.playJavaSettings

@@ -15,7 +15,7 @@ import util.GeocodeHelper;
 import java.util.LinkedList;
 import java.util.List;
 
-@Service
+@Service(value="yelp")
 public class YelpBarService implements BarService {
 
     @Override

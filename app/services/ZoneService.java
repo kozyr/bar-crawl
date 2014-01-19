@@ -3,6 +3,7 @@ package services;
 import com.google.common.base.Stopwatch;
 import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import play.Logger;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ZoneService {
     @Autowired
     private StreetRepository streetRepository;
+    @Qualifier("foursquare")
     @Autowired
     private BarService barService;
 

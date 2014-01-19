@@ -34,6 +34,10 @@ public final class GeoPoint {
         return " ( " + lat + ", " + lon + " ) ";
     }
 
+    public String toText() {
+        return lat + "," + lon;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
