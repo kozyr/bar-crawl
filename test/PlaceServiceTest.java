@@ -12,7 +12,7 @@ import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
 @ContextConfiguration(classes={AppConfig.class, TestDataConfig.class})
-public class BarServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class PlaceServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
     private BarService barService;

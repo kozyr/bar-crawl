@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @SuppressWarnings("serial")
 @Entity
-public class Bar implements Serializable  {
+public class Place implements Serializable  {
     @Id
     private String barId;
     private double lat;
@@ -24,7 +24,7 @@ public class Bar implements Serializable  {
     @Type(type="org.hibernate.spatial.GeometryType")
     private Point geom;
 
-    public Bar() {
+    public Place() {
         barId = UUID.randomUUID().toString();
     }
 
@@ -111,7 +111,7 @@ public class Bar implements Serializable  {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Bar{");
+        final StringBuilder sb = new StringBuilder("Place{");
         sb.append("barId=").append(barId);
         sb.append(", lat=").append(lat);
         sb.append(", lon=").append(lon);

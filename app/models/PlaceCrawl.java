@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @SuppressWarnings("serial")
 @Entity
-public class BarCrawl implements Serializable {
+public class PlaceCrawl implements Serializable {
 
     @Id
     @GeneratedValue(generator="uuid")
@@ -24,11 +24,11 @@ public class BarCrawl implements Serializable {
     @Cascade({CascadeType.ALL})
     @JoinTable(name = "BAR_CRAWL_BAR", joinColumns = { @JoinColumn(name = "barCrawlId") },
             inverseJoinColumns = { @JoinColumn(name = "barId") })
-    private List<Bar> bars;
+    private List<Place> places;
     private long createdOn;
 
-    public BarCrawl() {
-        bars = new ArrayList<>();
+    public PlaceCrawl() {
+        places = new ArrayList<>();
     }
 
     public UUID getBarCrawlId() {
@@ -45,15 +45,15 @@ public class BarCrawl implements Serializable {
         this.userId = userId;
     }
 
-    public void addBar(Bar bar) {
-        bars.add(bar);
+    public void addBar(Place place) {
+        places.add(place);
     }
 
-    public List<Bar> getBars() {
-        return bars;
+    public List<Place> getPlaces() {
+        return places;
     }
-    public void setBars(List<Bar> bars) {
-        this.bars = bars;
+    public void setPlaces(List<Place> places) {
+        this.places = places;
     }
 
 
@@ -66,25 +66,25 @@ public class BarCrawl implements Serializable {
         this.createdOn = createdOn;
     }
 
-    public Bar getStart() {
-        Bar first = null;
-        if (bars != null && bars.size() > 0) {
-            first = bars.get(0);
+    public Place getStart() {
+        Place first = null;
+        if (places != null && places.size() > 0) {
+            first = places.get(0);
         }
 
         return first;
     }
 
     public boolean isEmpty() {
-        return bars.size() == 0;
+        return places.size() == 0;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("BarCrawl{");
+        final StringBuilder sb = new StringBuilder("PlaceCrawl{");
         sb.append("barCrawlId=").append(barCrawlId);
         sb.append(", userId='").append(userId).append('\'');
-        sb.append(", bars=").append(bars);
+        sb.append(", places=").append(places);
         sb.append(", createdOn=").append(createdOn);
         sb.append('}');
         return sb.toString();

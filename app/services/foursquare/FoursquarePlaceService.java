@@ -5,20 +5,15 @@ import fi.foyt.foursquare.api.FoursquareApiException;
 import fi.foyt.foursquare.api.Result;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 import fi.foyt.foursquare.api.entities.VenuesSearchResult;
-import models.Bar;
+import models.Place;
 import models.GeoPoint;
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.Foursquare2Api;
-import org.scribe.model.*;
-import org.scribe.oauth.OAuthService;
 import org.springframework.stereotype.Service;
 import play.Configuration;
 import play.Logger;
 import play.Play;
-import services.BarService;
+import services.PlaceService;
 import util.GeoUtil;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -27,11 +22,11 @@ import java.util.*;
  * Time: 8:06 PM
  */
 @Service(value="foursquare")
-public class FoursquareBarService implements BarService {
+public class FoursquarePlaceService implements PlaceService {
 
     @Override
-    public List<Bar> findByLocation(GeoPoint location, double distance) {
-        List<Bar> bars = new LinkedList<>();
+    public List<Place> findByLocation(GeoPoint location, double distance) {
+        List<Place> places = new LinkedList<>();
 
         Configuration config = Play.application().configuration();
         String clientId = config.getString("foursquare.clientId");
@@ -53,9 +48,9 @@ public class FoursquareBarService implements BarService {
             if (result.getMeta().getCode() == 200) {
                 // if query was ok we can finally we do something with the data
                 for (CompactVenue venue : result.getResult().getVenues()) {
-                    Bar bar = barFromVenue(venue);
-                    // Logger.info("Received " + bar);
-                    bars.add(bar);
+                    Place place = barFromVenue(venue);
+                    // Logger.info("Received " + place);
+                    places.add(place);
                 }
             } else {
                 Logger.warn("  detail: " + result.getMeta().getErrorDetail());
@@ -64,22 +59,22 @@ public class FoursquareBarService implements BarService {
             Logger.error("Could not talk to Foursquare at " + location, e);
         }
 
-        return bars;
+        return places;
     }
 
-    private Bar barFromVenue(CompactVenue venue) {
-        Bar bar = new Bar();
-        bar.setName(venue.getName());
-        bar.setBarId(venue.getId());
-        bar.setAddress(venue.getLocation().getAddress());
-        bar.setPhone(venue.getContact().getPhone());
-        bar.setLat(venue.getLocation().getLat());
-        bar.setLon(venue.getLocation().getLng());
-        bar.setRating(venue.getStats().getCheckinsCount());
-        bar.setUrl(venue.getUrl());
-        bar.setGeom(GeoUtil.fromLatLon(bar.getLat(), bar.getLon()));
+    private Place barFromVenue(CompactVenue venue) {
+        Place place = new Place();
+        place.setName(venue.getName());
+        place.setBarId(venue.getId());
+        place.setAddress(venue.getLocation().getAddress());
+        place.setPhone(venue.getContact().getPhone());
+        place.setLat(venue.getLocation().getLat());
+        place.setLon(venue.getLocation().getLng());
+        place.setRating(venue.getStats().getCheckinsCount());
+        place.setUrl(venue.getUrl());
+        place.setGeom(GeoUtil.fromLatLon(place.getLat(), place.getLon()));
 
-        return bar;
+        return place;
     }
 
 }
