@@ -6,30 +6,32 @@ import com.vividsolutions.jts.index.SpatialIndex;
 import com.vividsolutions.jts.index.strtree.STRtree;
 import com.vividsolutions.jts.linearref.LinearLocation;
 import com.vividsolutions.jts.linearref.LocationIndexedLine;
+import play.Logger;
 
 import java.util.*;
 
 public class Zone {
     private final SpatialIndex index;
     private final Map<Integer, Street> streetMap;
-    private final Map<Integer, List<Bar>> barMap;
+    private final Map<Integer, List<Place>> placeMap;
 
     private static final int AROUND = 50;
 
     public Zone() {
         index = new STRtree();
         streetMap = new HashMap<>();
-        barMap = new HashMap<>();
+        placeMap = new HashMap<>();
     }
 
-    public Zone(List<Street> streets, List<Bar> bars) {
+    public Zone(List<Street> streets, List<Place> places) {
         this();
         for (Street s : streets) {
             addStreet(s);
         }
 
-        for (Bar b : bars) {
-            mapBar(b);
+        Logger.info("Got " + places);
+        for (Place b : places) {
+            mapPlace(b);
         }
     }
 
@@ -39,17 +41,17 @@ public class Zone {
         index.insert(line.getEnvelopeInternal(), street);
     }
 
-    private void mapBar(Bar bar) {
-        Point point =  bar.getGeom();
-        Street winner = mapPoint(point, bar.getName());
+    private void mapPlace(Place place) {
+        Point point =  place.getGeom();
+        Street winner = mapPoint(point, place.getName());
 
         if (winner != null) {
-            List<Bar> mapped = barMap.get(winner.getId());
+            List<Place> mapped = placeMap.get(winner.getId());
             if (mapped == null) {
                 mapped = new LinkedList<>();
-                barMap.put(winner.getId(), mapped);
+                placeMap.put(winner.getId(), mapped);
             }
-            mapped.add(bar);
+            mapped.add(place);
         }
     }
 
@@ -81,15 +83,15 @@ public class Zone {
         Street s = streetMap.get(streetId);
         if (s != null) {
             Block block = new Block(s);
-            block.setBars(queryNearbyBars(streetId));
+            block.setPlaces(queryNearbyPlaces(streetId));
             result = Optional.of(block);
         }
 
         return result;
     }
 
-    private List<Bar> queryNearbyBars(int streetId) {
-        List<Bar> result = barMap.get(streetId);
+    private List<Place> queryNearbyPlaces(int streetId) {
+        List<Place> result = placeMap.get(streetId);
         if (result == null) {
             result = Collections.emptyList();
         }

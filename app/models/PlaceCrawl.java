@@ -18,11 +18,11 @@ public class PlaceCrawl implements Serializable {
     @GeneratedValue(generator="uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @org.hibernate.annotations.Type(type="uuid-char")
-    private UUID barCrawlId;
+    private UUID placeCrawlId;
     private String userId;
     @ManyToMany
     @Cascade({CascadeType.ALL})
-    @JoinTable(name = "BAR_CRAWL_BAR", joinColumns = { @JoinColumn(name = "barCrawlId") },
+    @JoinTable(name = "PLACE_CRAWL_BAR", joinColumns = { @JoinColumn(name = "placeCrawlId") },
             inverseJoinColumns = { @JoinColumn(name = "barId") })
     private List<Place> places;
     private long createdOn;
@@ -31,11 +31,11 @@ public class PlaceCrawl implements Serializable {
         places = new ArrayList<>();
     }
 
-    public UUID getBarCrawlId() {
-        return barCrawlId;
+    public UUID getPlaceCrawlId() {
+        return placeCrawlId;
     }
     public void setBarCrawlId(UUID barCrawlId) {
-        this.barCrawlId = barCrawlId;
+        this.placeCrawlId = barCrawlId;
     }
 
     public String getUserId() {
@@ -45,7 +45,7 @@ public class PlaceCrawl implements Serializable {
         this.userId = userId;
     }
 
-    public void addBar(Place place) {
+    public void addPlace(Place place) {
         places.add(place);
     }
 
@@ -55,8 +55,6 @@ public class PlaceCrawl implements Serializable {
     public void setPlaces(List<Place> places) {
         this.places = places;
     }
-
-
 
     public long getCreatedOn() {
         return createdOn;
@@ -82,7 +80,7 @@ public class PlaceCrawl implements Serializable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PlaceCrawl{");
-        sb.append("barCrawlId=").append(barCrawlId);
+        sb.append("placeCrawlId=").append(placeCrawlId);
         sb.append(", userId='").append(userId).append('\'');
         sb.append(", places=").append(places);
         sb.append(", createdOn=").append(createdOn);

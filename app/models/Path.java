@@ -30,9 +30,9 @@ public class Path {
         List<Double> ratings = new LinkedList<>();
         for (DirectedBlock edge : edges) {
             Block block = edge.getBlock();
-            List<Bar> bars = block.getBars();
+            List<Place> places = block.getPlaces();
 
-            for (Bar b : bars) {
+            for (Place b : places) {
                 ratings.add(b.getRating());
             }
         }

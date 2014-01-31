@@ -12,7 +12,7 @@ import java.util.UUID;
 @Entity
 public class Place implements Serializable  {
     @Id
-    private String barId;
+    private String placeId;
     private double lat;
     private double lon;
     private String name;
@@ -25,15 +25,15 @@ public class Place implements Serializable  {
     private Point geom;
 
     public Place() {
-        barId = UUID.randomUUID().toString();
+        placeId = UUID.randomUUID().toString();
     }
 
-    public String getBarId() {
-        return barId;
+    public String getPlaceId() {
+        return placeId;
     }
 
-    public void setBarId(String barId) {
-        this.barId = barId;
+    public void setPlaceId(String barId) {
+        this.placeId = barId;
     }
 
     public double getLon() {
@@ -112,7 +112,7 @@ public class Place implements Serializable  {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Place{");
-        sb.append("barId=").append(barId);
+        sb.append("placeId=").append(placeId);
         sb.append(", lat=").append(lat);
         sb.append(", lon=").append(lon);
         sb.append(", name='").append(name).append('\'');

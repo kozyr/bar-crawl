@@ -1,8 +1,8 @@
-var BarCrawl= function(map) {
+var PlaceCrawl= function(map) {
     this.crawlRoute = null;
     this.map = map;
     this.markers = new Array();
-    this.barIcon = "/assets/images/drink.png";
+    this.placeIcon = "/assets/images/drink.png";
     this.startIcon = "/assets/images/group.png";
     this.endIcon = "/assets/images/finish.png";
     this.lineSymbol = {
@@ -12,7 +12,7 @@ var BarCrawl= function(map) {
     };
 };
 
-BarCrawl.prototype.init = function() {
+PlaceCrawl.prototype.init = function() {
     var that = this;
     // this.findLocation();
     google.maps.event.addListener(this.map, 'dblclick', function(event) {
@@ -20,7 +20,7 @@ BarCrawl.prototype.init = function() {
     });
 }
 
-BarCrawl.prototype.findLocation = function() {
+PlaceCrawl.prototype.findLocation = function() {
     var that = this;
     navigator.geolocation.getCurrentPosition(function(position) {
         var myLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
@@ -28,14 +28,14 @@ BarCrawl.prototype.findLocation = function() {
     });
 };
 
-BarCrawl.prototype.changeLocation = function(myLocation) {
+PlaceCrawl.prototype.changeLocation = function(myLocation) {
     this.map.setCenter(myLocation);
     this.map.setZoom(16);
     this.clearMap();
     // this.addMarker(myLocation, "You are here");
 };
 
-BarCrawl.prototype.addMarker = function(position, title, icon) {
+PlaceCrawl.prototype.addMarker = function(position, title, icon) {
     var marker = new google.maps.Marker({
         map: this.map,
         position: position,
@@ -47,14 +47,14 @@ BarCrawl.prototype.addMarker = function(position, title, icon) {
     this.markers.push(marker);
 };
 
-BarCrawl.prototype.clearMap = function() {
+PlaceCrawl.prototype.clearMap = function() {
     for (var i = 0; i < this.markers.length; i++) {
         this.markers[i].setMap(null);
     }
     this.markers = new Array();
 };
 
-BarCrawl.prototype.animateCrawl = function() {
+PlaceCrawl.prototype.animateCrawl = function() {
     var that = this;
     var count = 0;
     offsetId = window.setInterval(function() {
@@ -67,12 +67,12 @@ BarCrawl.prototype.animateCrawl = function() {
 }
 
 
-BarCrawl.prototype.getCrawlRoute = function(latLng) {
+PlaceCrawl.prototype.getCrawlRoute = function(latLng) {
     var that = this;
     $.ajax({
         type:  "GET",
         dataType: 'json',
-        url: "/bar-crawl",
+        url: "/place-crawl",
         data: {
             lat: latLng.lat(),
             lon: latLng.lng()
@@ -82,7 +82,7 @@ BarCrawl.prototype.getCrawlRoute = function(latLng) {
     });
 }
 
-BarCrawl.prototype.processRoute = function(startLatLng, jsonRoute) {
+PlaceCrawl.prototype.processRoute = function(startLatLng, jsonRoute) {
     var that = this;
     var points = new Array();
 
@@ -95,8 +95,8 @@ BarCrawl.prototype.processRoute = function(startLatLng, jsonRoute) {
         console.log(edge.block.street.osm_name + " (" + edge.start.lat + ", " +  edge.start.lon + ") -> (" + edge.end.lat + ", " + edge.end.lon + ")");
         blockEnd = new google.maps.LatLng(edge.end.lat, edge.end.lon);
         points.push(blockEnd);
-        $.each(edge.block.bars, function(j, bar) {
-            that.addMarker(new google.maps.LatLng(bar.lat, bar.lon), bar.name, that.barIcon);
+        $.each(edge.block.places, function(j, place) {
+            that.addMarker(new google.maps.LatLng(place.lat, place.lon), place.name, that.placeIcon);
         });
     });
 
@@ -104,7 +104,7 @@ BarCrawl.prototype.processRoute = function(startLatLng, jsonRoute) {
     this.displayRoute(points);
 }
 
-BarCrawl.prototype.displayRoute = function(points) {
+PlaceCrawl.prototype.displayRoute = function(points) {
     this.map.setCenter(points[0]);
     if (this.crawlRoute) {
         this.crawlRoute.setPath(points);
@@ -133,8 +133,8 @@ $(document).ready(function() {
         disableDoubleClickZoom: true
     };
 
-    var map = new google.maps.Map($("#bar-crawl-map")[0], mapOptions);
+    var map = new google.maps.Map($("#place-crawl-map")[0], mapOptions);
 
-    var tourGuide = new BarCrawl(map);
+    var tourGuide = new PlaceCrawl(map);
     tourGuide.init();
 });

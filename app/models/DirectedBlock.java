@@ -50,8 +50,8 @@ public class DirectedBlock {
         sb.append(": ");
         sb.append(getBlock().getStreet().getOsm_name());
         sb.append(" - ");
-        sb.append(getBlock().getBars().size());
-        sb.append(" bars");
+        sb.append(getBlock().getPlaces().size());
+        sb.append(" places");
         return sb.toString();
     }
 }

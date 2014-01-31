@@ -37,21 +37,21 @@ public class Application {
     private TourGuide tourGuide;
 
     private static final int MILE = 1609;
-    private static final int MAX_BAR_CRAWL_DISTANCE = 1000;
+    private static final int MAX_PLACE_CRAWL_DISTANCE = 1000;
 
     public Result index() {
         return ok(index.render());
     }
 
-    public Promise<Result> barCrawl(final double lat, final double lon) {
-        Promise<Optional<Path>> barPromise = Promise.promise(
+    public Promise<Result> placeCrawl(final double lat, final double lon) {
+        Promise<Optional<Path>> placePromise = Promise.promise(
                 new Function0<Optional<Path>>() {
                     public Optional<Path> apply() {
-                        return calcBarPath(lat, lon);
+                        return calcPlacePath(lat, lon);
                     }
                 }
         );
-        return barPromise.map(
+        return placePromise.map(
                 new Function<Optional<Path>, Result>() {
                     public Result apply(Optional<Path> path) {
                         if (path.isPresent()) {
@@ -64,12 +64,12 @@ public class Application {
         );
     }
 
-    private Optional<Path> calcBarPath(double lat, double lon) {
+    private Optional<Path> calcPlacePath(double lat, double lon) {
         GeoPoint start = new GeoPoint(lat, lon);
-        Zone zone = zoneService.buildZone(start, 2* MAX_BAR_CRAWL_DISTANCE);
+        Zone zone = zoneService.buildZone(start, 2* MAX_PLACE_CRAWL_DISTANCE);
         List<DirectedBlock> first = routeProvider.getBlockFromPoint(start, zone);
         Logger.info("Initial streets: "  + first);
-        Optional<Path> path = tourGuide.ratingBfs(first, zone, MAX_BAR_CRAWL_DISTANCE);
+        Optional<Path> path = tourGuide.ratingBfs(first, zone, MAX_PLACE_CRAWL_DISTANCE);
 
         return path;
     }

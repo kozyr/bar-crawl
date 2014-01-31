@@ -1,25 +1,23 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.LinkedList;
 import java.util.List;
 
 public class Block {
     private Street street;
-    private List<Bar> bars;
+    private List<Place> places;
 
     public Block(Street street) {
         this.street = street;
-        bars = new LinkedList<>();
+        places = new LinkedList<>();
     }
 
-    public List<Bar> getBars() {
-        return bars;
+    public List<Place> getPlaces() {
+        return places;
     }
 
-    public void setBars(List<Bar> businesses) {
-        this.bars = businesses;
+    public void setPlaces(List<Place> businesses) {
+        this.places = businesses;
     }
 
     public Street getStreet() {

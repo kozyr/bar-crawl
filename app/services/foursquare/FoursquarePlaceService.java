@@ -31,6 +31,7 @@ public class FoursquarePlaceService implements PlaceService {
         Configuration config = Play.application().configuration();
         String clientId = config.getString("foursquare.clientId");
         String clientSecret = config.getString("foursquare.clientSecret");
+        String placeType = config.getString("foursquare.placeType");
 
         // First we need a initialize FoursquareApi.
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret, null);
@@ -41,7 +42,7 @@ public class FoursquarePlaceService implements PlaceService {
             params.put("ll", location.toText());
             params.put("radius", String.valueOf(1000));
             params.put("intent", "browse");
-            params.put("query", "bar");
+            params.put("query", placeType);
 
             Result<VenuesSearchResult> result = foursquareApi.venuesSearch(params);
 
@@ -65,7 +66,7 @@ public class FoursquarePlaceService implements PlaceService {
     private Place barFromVenue(CompactVenue venue) {
         Place place = new Place();
         place.setName(venue.getName());
-        place.setBarId(venue.getId());
+        place.setPlaceId(venue.getId());
         place.setAddress(venue.getLocation().getAddress());
         place.setPhone(venue.getContact().getPhone());
         place.setLat(venue.getLocation().getLat());

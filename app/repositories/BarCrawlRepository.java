@@ -1,7 +1,7 @@
 package repositories;
 
 import com.vividsolutions.jts.geom.Point;
-import models.BarCrawl;
+import models.PlaceCrawl;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface BarCrawlRepository extends CrudRepository<BarCrawl, UUID> {
+public interface BarCrawlRepository extends CrudRepository<PlaceCrawl, UUID> {
     @Transactional(readOnly = true)
-    @Query("SELECT distinct br FROM BarCrawl br JOIN FETCH br.bars b where dwithin(:point, b.geom, :distance)=true")
-    public List<BarCrawl> findByLocation(@Param("point") Point point, @Param("distance") double distance);
+    @Query("SELECT distinct br FROM PlaceCrawl br JOIN FETCH br.places b where dwithin(:point, b.geom, :distance)=true")
+    public List<PlaceCrawl> findByLocation(@Param("point") Point point, @Param("distance") double distance);
 }

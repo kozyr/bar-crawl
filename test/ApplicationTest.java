@@ -18,7 +18,7 @@ public class ApplicationTest {
     public void indexTemplate() {
         running(fakeApplication(), new Runnable() {
             public void run() {
-                Form<Bar> form = Form.form(Bar.class);
+                Form<Place> form = Form.form(Place.class);
                 Content html = views.html.index.render(form);
                 assertThat(contentType(html)).isEqualTo("text/html");
                 assertThat(contentAsString(html)).contains("Welcome");
