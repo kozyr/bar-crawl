@@ -1,9 +1,7 @@
 package controllers;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Optional;
-import com.google.common.base.Stopwatch;
 import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +12,9 @@ import play.libs.F.Function0;
 import play.libs.Json;
 import play.mvc.Result;
 import repositories.BarCrawlRepository;
-import services.RouteProvider;
 import services.TourGuide;
 import services.ZoneService;
+import services.RouteProvider;
 import models.Zone;
 import views.html.index;
 
