@@ -38,7 +38,7 @@ public class FoursquarePlaceService implements PlaceService {
         try {
             Map<String, String> params = new HashMap<>();
             params.put("ll", location.toText());
-            params.put("radius", String.valueOf(1000));
+            params.put("radius", String.valueOf(distance));
             params.put("intent", "browse");
             params.put("query", placeType);
 

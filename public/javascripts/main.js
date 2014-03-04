@@ -88,7 +88,7 @@ PlaceCrawl.prototype.processRoute = function(startLatLng, jsonRoute) {
 
     this.clearMap();
     points.push(startLatLng);
-    this.addMarker(startLatLng, "You are here", this.startIcon);
+    this.addMarker(startLatLng, "Start", this.startIcon);
 
     var blockEnd = null;
     $.each(jsonRoute.edges, function(i, edge) {
