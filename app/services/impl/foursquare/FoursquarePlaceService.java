@@ -19,7 +19,7 @@ import java.util.*;
 /**
  * User: sergei
  */
-@Service(value="foursquare")
+@Service
 public class FoursquarePlaceService implements PlaceService {
 
     @Override

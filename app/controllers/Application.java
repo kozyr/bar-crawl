@@ -11,7 +11,6 @@ import play.libs.F.Function;
 import play.libs.F.Function0;
 import play.libs.Json;
 import play.mvc.Result;
-import repositories.BarCrawlRepository;
 import services.TourGuide;
 import services.ZoneService;
 import services.RouteProvider;
@@ -25,8 +24,6 @@ import static play.mvc.Results.ok;
 
 @Controller
 public class Application {
-    @Autowired
-    private BarCrawlRepository trackingPathRepository;
     @Autowired
     private ZoneService zoneService;
     @Autowired

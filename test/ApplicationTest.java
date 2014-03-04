@@ -26,7 +26,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void callPlaceBrawl() {
+    public void callPlaceCrawl() {
         running(fakeApplication(), new Runnable() {
             public void run() {
                 Result result = callAction(controllers.routes.ref.Application.placeCrawl(TEST_LAT, TEST_LON));

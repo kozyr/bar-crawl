@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 public class ZoneServiceImpl implements ZoneService {
     @Autowired
     private StreetRepository streetRepository;
-    @Qualifier("foursquare")
     @Autowired
     private PlaceService placeService;
 
