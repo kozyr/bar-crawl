@@ -4,12 +4,69 @@
     </head>
     <body>
         <div>
+            <p>You've started the Chicago Bar Crawl app!</p>
             <h2>Overview</h2>
-            This is an overview page.
+            <p>
+                Once the application has been compiled and the server started, your application can be accessed at:
+                <a href="http://localhost:9000" target="_blank">http://localhost:9000</a><br/>
+                Check in <a href="#run" class="shortcut">Run</a> to see the server status.
+            </p>
+            <p>
+                The first thing you will see is the map of Chicago Wrigleyville neighborhood, centered around Wrigley Field.
+                Double click anywhere on the map to generate a bar crawl route starting at that location.
+            </p>
         </div>
         <div>
-            <h2>Second page</h2>
-            Page number 2
+            <h2>Play, Spring and GIS</h2>
+            <p>
+                The app shows how to use Play Framework, Spring and Open Street Map data to create a simple GIS application.
+            </p>
+            <p>
+                The architecture of the app is very simple - it receive an AJAX request from the browser with starting bar crawl location,
+                loads all the street segments within a mile of that location from an embedded GeoDB database,
+                queries Foursquare to get all the bars in the same area,
+                and then produces a path that tries to maximize the number of popular bars on it.
+            </p>
+        </div>
+        <div>
+            <h2>GIS</h2>
+            <p>
+                The app comes with an embedded GeoDB database that contains all the street segments for Chicago.
+                To generate it, we've downloaded the map of Chicago from Open Street Map, and then converted it into routable
+                street segments by using <a href="http://osm2po.de/">osm2po</a> library. As a result,
+                we have a graph representation of all  the streets (walk_2po.gph), as well
+                as a <a href="#code/conf/test/default/1.sql" class="shortcut">sql script</a> to load the streets into a database
+                for proximity querying.
+            </p>
+        </div>
+        <div>
+            <h2>Spring</h2>
+            <p>
+                We use Spring to wire everything together. Main
+                <a href="#code/app/Application.java" class="shortcut">Application</a> controller relies on <code>@Autowired</code>
+                <a href="#code/app/services/RouteProvider.java" class="shortcut">RouteProvider</a>,
+                <a href="#code/app/services/TourGuide.java" class="shortcut">TourGuide</a> and
+                <a href="#code/app/services/ZoneService.java" class="shortcut">ZoneService</a> services
+                to produce the final route.
+            </p>
+        </div>
+        <div>
+            <h2>Spring Configuration</h2>
+            <p>
+                We use annotation-based Spring config. To setup it up with Play, we need to override <code>onStart()</code> method
+                <a href="#code/app/Global.java" class="shortcut">Global</a> to initialize <code>ApplicationContext</code> with
+                <a href="#code/app/configs/AppConfig.java" class="shortcut">AppConfig</a> and
+                <a href="#code/app/configs/DataConfig.java" class="shortcut">DataConfig</a> that setup our
+                <a href="#code/app/repositories/StreetRepository.java" class="shortcut">Spring Data JPA repository</a> and
+                our DB <code>dataSource</code>.
+            </p>
+        </div>
+        <div>
+            <h2>Querying GIS data</h2>
+            <p>
+                Through <a href="#code/app/repositories/StreetRepository.java" class="shortcut">StreetRepository</a> we get all the street segments
+                within a mile of our bar crawl path.
+            </p>
         </div>
     </body>
 </html>
