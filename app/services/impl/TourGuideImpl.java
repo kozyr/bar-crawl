@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import play.Logger;
 import services.RouteProvider;
-import services.ZoneService;
 
 import java.util.*;
 
@@ -16,8 +15,6 @@ import java.util.*;
 public class TourGuideImpl implements services.TourGuide {
     @Autowired
     private RouteProvider router;
-    @Autowired
-    private ZoneService zoneService;
 
     @Override
     public Optional<Path> ratingBfs(List<DirectedBlock> start, Zone zone, int distance) {
@@ -57,11 +54,16 @@ public class TourGuideImpl implements services.TourGuide {
             }
         }
 
-        Logger.info("Number of paths " + map.size());
+        return findBestPath(map);
+    }
+
+    private Optional<Path> findBestPath(Map<DirectedBlock, Path> map) {
+
         Optional<Path> winner = Optional.absent();
         double average = 0;
         for (DirectedBlock street : map.keySet()) {
             Path path = map.get(street);
+            path.trim();
             if (path.getAverageRating() > average) {
                 winner = Optional.of(path);
                 average = path.getAverageRating();

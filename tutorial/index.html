@@ -65,7 +65,10 @@
             <h2>Querying GIS data</h2>
             <p>
                 Through <a href="#code/app/repositories/StreetRepository.java" class="shortcut">StreetRepository</a> we get all the street segments
-                within a mile of our bar crawl path.
+                within a mile of our location. <a href="#code/app/services/impl/foursquare/FoursquarePlaceService.java" class="shortcut">PlaceService</a> fetches all bars within a
+                mile of our location. Both of these are called in parallel in <a href="#code/app/services/impl/ZoneServiceImpl.java" class="shortcut">ZoneService</a>,
+                and we end up with a Zone object which contains a mapping of street segments to all bars located on a particular street. To get this mapping, we're
+                "pulling" each bar to the nearest street with the help of GeoTools library.
             </p>
         </div>
     </body>

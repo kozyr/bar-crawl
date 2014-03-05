@@ -39,6 +39,10 @@ public class DirectedBlock {
         return segment.getTargetId();
     }
 
+    public boolean isEmpty() {
+        return block.isEmpty();
+    }
+
     public Block getBlock() {
         return block;
     }

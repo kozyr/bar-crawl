@@ -27,4 +27,8 @@ public class Block {
     public void setStreet(Street street) {
         this.street = street;
     }
+
+    public boolean isEmpty() {
+        return places.isEmpty();
+    }
 }

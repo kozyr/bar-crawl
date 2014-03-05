@@ -7,14 +7,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Path {
-    private List<DirectedBlock> edges = new ArrayList<>();
+
+    private List<DirectedBlock> edges = new LinkedList<>();
 
     public Path(DirectedBlock initial) {
         edges.add(initial);
     }
 
     public Path(Path other) {
-        edges = new ArrayList<>(other.edges);
+        edges = new LinkedList<>(other.edges);
     }
 
     public Path extend(DirectedBlock edge) {
@@ -42,6 +43,9 @@ public class Path {
         }
         if (ratings.size() > 0)
             average /= ratings.size();
+
+        // prefer paths with 10+ bars
+        average *= ratings.size() / 10.0;
 
         return average;
     }
@@ -82,5 +86,18 @@ public class Path {
         }
 
         return length;
+    }
+
+    public void trim() {
+        LinkedList path = (LinkedList) edges;
+
+        while (!path.isEmpty()) {
+            DirectedBlock block = (DirectedBlock) path.getLast();
+            if (block.isEmpty()) {
+                path.removeLast();
+            } else {
+                break;
+            }
+        }
     }
 }
