@@ -9,3 +9,15 @@ body { height: 100%; margin: 0; padding: 0 }
 #place-crawl-map img {
     max-width: inherit;
 }
+
+.alert {
+    position: absolute;
+    z-index: 99999999;
+    top: 50px; left: 100px; right: 100px;
+    font-size: 1.5em;
+}
+
+#loader {
+    float: right;
+    display: none;
+}

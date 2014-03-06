@@ -69,6 +69,7 @@ PlaceCrawl.prototype.animateCrawl = function() {
 
 PlaceCrawl.prototype.getCrawlRoute = function(latLng) {
     var that = this;
+    $("#loader").show();
     $.ajax({
         type:  "GET",
         dataType: 'json',
@@ -77,8 +78,12 @@ PlaceCrawl.prototype.getCrawlRoute = function(latLng) {
             lat: latLng.lat(),
             lon: latLng.lng()
         }
-    }).success(function(response) {
+    }).done(function(response) {
         that.processRoute(latLng, response);
+    }).fail(function() {
+            alert( "error" );
+    }).always(function() {
+        $("#loader").hide();
     });
 }
 

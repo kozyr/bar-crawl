@@ -1,8 +1,9 @@
 @main("Place Crawl App") {
+    <div class="alert alert-info"><img id="loader" src="@routes.Assets.at("images/ajax-loader.gif")"/> Double click anywhere on the map to generate a bar crawl route</div>
+
     <div id="place-crawl-map">
     </div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
 }
