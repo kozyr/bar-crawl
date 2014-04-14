@@ -7,3 +7,4 @@
 /.idea_modules
 /.settings
 /testdb.h2.db
+activator-sbt-*-shim.sbt
